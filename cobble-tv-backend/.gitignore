@@ -1,5 +1,7 @@
 .idea/
 containers/
+.DS_Store
+
 # Logs
 logs
 *.log
