@@ -35,7 +35,7 @@ export class PrismaUserDatasourceImpl implements UserDatasource {
 
                 const livestream = await prisma.livestream.create({
                     data: {
-                        userId: user["id"],
+                        streamerId: user["id"],
                         title: params.username + "'s live.",
                         description: 'Write something about yourself.'
                     }

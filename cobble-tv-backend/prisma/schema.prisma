@@ -20,6 +20,7 @@ model User {
   password   String
   createdAt  DateTime    @default(now())
   Livestream Livestream?
+  Messages   Message[]
 
   @@map("users")
 }
@@ -28,8 +29,8 @@ model Livestream {
   id          String @id @default(uuid())
   title       String
   description String
-  user        User   @relation(fields: [userId], references: [id])
-  userId      String @unique
+  streamer    User   @relation(fields: [streamerId], references: [id])
+  streamerId  String @unique
   Chat        Chat?
 
   @@map("livestreams")
@@ -48,6 +49,8 @@ model Message {
   id       String   @id @default(uuid())
   content  String
   createAt DateTime @default(now())
+  sender   User     @relation(fields: [senderId], references: [id])
+  senderId String
   chat     Chat     @relation(fields: [chatId], references: [id])
   chatId   String
 
