@@ -3,9 +3,9 @@ import { container } from "tsyringe";
 import {
   AuthenticationController,
   AuthenticationControllerImpl,
-} from "controllers/AuthenticationController";
+} from "./controllers/AuthenticationController";
 import { ApiHelper } from "../../utils/helpers/ApiHelper";
-import { validateSignInCredentials } from "middlewares/AuthenticationMiddlewares";
+import { validateSignInCredentials } from "./middlewares/AuthenticationMiddlewares";
 
 export default function AuthenticationRouter() {
   const module = "auth";

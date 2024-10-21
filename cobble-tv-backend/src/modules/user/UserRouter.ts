@@ -1,12 +1,10 @@
 import express, {Request, Response} from "express";
 import {ApiHelper} from "../../utils/helpers/ApiHelper";
-import {
-  UserController,
-  UserControllerImpl,
-} from "controllers/UserController";
+
 import { container } from "tsyringe";
-import { validateUser } from "middlewares/UserMiddlewares";
+import { validateUser } from "./middlewares/UserMiddlewares";
 import {authMiddleware} from "../commons/middlewares/Auth";
+import {UserController, UserControllerImpl} from "./controllers/UserController";
 
 export default function UserRouter() {
   const module = "users";
