@@ -1,9 +1,11 @@
-import {z, ZodType} from 'zod';
+import {z} from 'zod';
 
 export interface CreateUserEntity {
     email: string;
     username: string;
     password: string;
+    picture: File;
+    colorHex: string;
     confirmPassword: string;
 }
 
@@ -20,7 +22,13 @@ export const CreateUserSchema = z.object({
     email: z.string({
         required_error: "Email is required",
     }).email("Not a valid email"),
+    colorHex: z.string({
+        required_error: "colorHex is required",
+    }).length(7, 'colorHex is wrong format - #XXXXXXX'),
+    picture: z.instanceof(File, {
+        message: "Picture must be a file",
+    }),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-}) satisfies ZodType<CreateUserEntity>;
+}) satisfies z.infer<typeof CreateUserSchema> as CreateUserEntity;

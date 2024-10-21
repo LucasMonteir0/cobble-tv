@@ -13,21 +13,32 @@ export class PrismaUserDatasourceImpl implements UserDatasource {
         params: CreateUserEntity,
     ): Promise<ResultWrapper<UserEntity>> {
         try {
-            const userExists = await database.user.findUnique({
+            const emailExists = await database.user.findUnique({
                 where: {email: params.email},
             });
+            const usernameExists = await database.user.findUnique({
+                where: {username: params.username},
+            });
 
-            if (userExists) {
+            if (emailExists) {
                 const error = new ConflictError("Email already in use.");
                 return ResultWrapper.error(error);
             }
+            if (usernameExists) {
+                const error = new ConflictError("Username already in use.");
+                return ResultWrapper.error(error);
+            }
             const encryptedPassword = await hash(params.password, 8);
+
+            const pictureUrl = '';
 
             const result = await database.$transaction(async (prisma) => {
                 const user = await prisma.user.create({
                     data: {
                         username: params.username,
                         email: params.email,
+                        colorHex: params.colorHex,
+                        pictureUrl: pictureUrl,
                         password: encryptedPassword,
                     },
                 });
