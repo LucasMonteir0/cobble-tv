@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: cobble-tv-db
+    volumes:
+      - ./containers/database/postgres/volumes:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    networks:
+      - cobble-tv-backend
+
+networks:
+  cobble-tv-backend:
+    driver: bridge
