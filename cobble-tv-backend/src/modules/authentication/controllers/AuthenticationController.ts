@@ -1,5 +1,5 @@
-import {inject, injectable} from "tsyringe";
-import {AuthenticationDatasource} from "../datasources/AuthenticationDatasource";
+import { inject, injectable } from "tsyringe";
+import { AuthenticationDatasource } from "../datasources/AuthenticationDatasource";
 
 export interface AuthenticationController {
   signIn(req, res): Promise<UserAuthenticationTokensEntity>;
@@ -7,15 +7,14 @@ export interface AuthenticationController {
 
 @injectable<AuthenticationController>()
 export class AuthenticationControllerImpl implements AuthenticationController {
-
   constructor(
-      @inject('AuthenticationDatasource')
-      private datasource: AuthenticationDatasource
+    @inject("AuthenticationDatasource")
+    private datasource: AuthenticationDatasource,
   ) {}
 
   async signIn(req, res): Promise<UserAuthenticationTokensEntity> {
     const { email, password } = req.body;
-    const result = await this.datasource.signIn({ email, password });
+    const result = await this.datasource.signIn({ login: email, password });
 
     if (result.isSuccess) {
       res.statusCode = 201;

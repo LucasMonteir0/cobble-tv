@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export interface CreateUserEntity {
   email: string;
   username: string;
@@ -9,20 +17,18 @@ export interface CreateUserEntity {
   confirmPassword: string;
 }
 
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
-const MAX_FILE_SIZE = 5000000;
-
 export const CreateUserSchema = z
   .object({
-    username: z.string({
-      required_error: "Username is required",
-    }),
+    username: z
+      .string({
+        required_error: "Username is required",
+      })
+      .min(3, "Username must have at least 3 characters")
+      .max(16, "Username can't have more than 16 characters")
+      .regex(/^[a-zA-Z0-9]+$/, {
+        message:
+          "Username must contain only letters and digits without special characters",
+      }),
     password: z
       .string({
         required_error: "Password is required",

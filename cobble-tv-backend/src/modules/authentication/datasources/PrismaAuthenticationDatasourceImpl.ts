@@ -1,13 +1,15 @@
 import { AuthenticationDatasource } from "./AuthenticationDatasource";
 import { inject, injectable } from "tsyringe";
 import { compare } from "bcryptjs";
-import {SignInCredentialsEntity} from "../entities/SignInCredentialsEntity";
-import {ResultWrapper} from "../../../utils/http/ResultWrapper";
-import {database} from "../../../config/database";
-import {NotFoundError, UnauthorizedError} from "../../../utils/http/AppError";
+import { SignInCredentialsEntity } from "../entities/SignInCredentialsEntity";
+import { ResultWrapper } from "../../../utils/http/ResultWrapper";
+import { database } from "../../../config/database";
+import { NotFoundError, UnauthorizedError } from "../../../utils/http/AppError";
 
 @injectable()
-export class PrismaAuthenticationDatasourceImpl implements AuthenticationDatasource {
+export class PrismaAuthenticationDatasourceImpl
+  implements AuthenticationDatasource
+{
   public constructor(
     @inject("JwtTokenService")
     private jwtTokenService: JwtTokenService,
@@ -16,8 +18,15 @@ export class PrismaAuthenticationDatasourceImpl implements AuthenticationDatasou
   async signIn(
     credentials: SignInCredentialsEntity,
   ): Promise<ResultWrapper<UserAuthenticationTokensEntity>> {
+    let whereProps;
+    if (credentials.login.includes("@")) {
+      whereProps = { email: credentials.login };
+    } else {
+      whereProps = { username: credentials.login };
+    }
+
     const user = await database.user.findUnique({
-      where: { email: credentials.email },
+      where: whereProps,
     });
 
     if (!user) {
