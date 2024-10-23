@@ -1,10 +1,14 @@
-import express, {Request, Response} from "express";
-import {ApiHelper} from "../../utils/helpers/ApiHelper";
+import express, { Request, Response } from "express";
+import { ApiHelper } from "../../utils/helpers/ApiHelper";
 
 import { container } from "tsyringe";
 import { validateUser } from "./middlewares/UserMiddlewares";
-import {authMiddleware} from "../commons/middlewares/Auth";
-import {UserController, UserControllerImpl} from "./controllers/UserController";
+import { authMiddleware } from "../commons/middlewares/Auth";
+import {
+  UserController,
+  UserControllerImpl,
+} from "./controllers/UserController";
+import { uploadFile } from "../commons/middlewares/UploadFile";
 
 export default function UserRouter() {
   const module = "users";
@@ -15,6 +19,7 @@ export default function UserRouter() {
   // CREATE USER
   router.post(
     ApiHelper.getPublicUrl({ module }),
+    uploadFile("picture"),
     validateUser,
     async (req: Request, res: Response) => {
       return controller.createUser(req, res);

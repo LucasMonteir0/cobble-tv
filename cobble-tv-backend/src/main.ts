@@ -1,7 +1,7 @@
 import server from "./server";
 import "reflect-metadata";
 import UserRouter from "./modules/user/UserRouter";
-import AuthenticationRouter from "./modules/authentication/AuthenticationRoute";
+import AuthenticationRouter from "./modules/authentication/AuthenticationRouter";
 
 
 const host = process.env.HOST_URL;

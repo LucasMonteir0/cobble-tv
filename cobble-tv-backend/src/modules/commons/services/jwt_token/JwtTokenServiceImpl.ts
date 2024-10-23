@@ -1,6 +1,6 @@
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { injectable } from "tsyringe";
-import {UnauthorizedError} from "../../../utils/http/AppError";
+import {UnauthorizedError} from "../../../../utils/http/AppError";
 
 interface CustomJwtPayload extends JwtPayload {
   userId: string;

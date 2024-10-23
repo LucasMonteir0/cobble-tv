@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { inject, injectable } from "tsyringe";
-import {UserDatasource} from "../datasources/UserDatasource";
+import { UserDatasource } from "../datasources/UserDatasource";
+import { CreateUserEntity } from "../entities/CreateUserEntity";
 
 export interface UserController {
   createUser(req: Request, res: Response): Promise<void>;
@@ -12,11 +13,20 @@ export interface UserController {
 export class UserControllerImpl implements UserController {
   constructor(
     @inject("UserDatasource")
-    private datasource: UserDatasource
+    private datasource: UserDatasource,
   ) {}
 
   public async createUser(req: Request, res: Response) {
-    const result = await this.datasource.createUser(req.body);
+    const picture: Express.Multer.File | undefined = req.file;
+    const body = {
+      email: req.body.email,
+      username: req.body.username,
+      password: req.body.password,
+      picture: picture,
+      colorHex: req.body.colorHex,
+      confirmPassword: req.body.confirmPassword,
+    } as CreateUserEntity;
+    const result = await this.datasource.createUser(body);
     if (result.isSuccess) {
       res.statusCode = 201;
       res.json(result.data);
