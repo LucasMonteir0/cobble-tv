@@ -45,7 +45,6 @@ export const CreateUserSchema = z
     colorHex: z.string().length(7, "colorHex is wrong format - #XXXXXXX"),
     picture: z
       .any()
-      // To not allow files other than images
       .refine(
         (file: Express.Multer.File) =>
           ACCEPTED_IMAGE_TYPES.includes(file.mimetype),
